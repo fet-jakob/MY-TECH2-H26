@@ -20,9 +20,10 @@ Tasks
 
 """
 
-#This code does defines the fuction argmax wuthout importing it
+# This code does defines the fuction argmax wuthout importing it
 
 import numpy as np
+
 
 def argmax(values):
     """
@@ -32,32 +33,49 @@ def argmax(values):
     ---------
     Values
         Sequnce of values
-    
+
     Return
     -------
     imax : int
         Index maximum
-    """ 
+    """
 
     N = len(values)
 
-    imax = -1
-    #Set the vmax to the lowest possible value
-    vmax = - np.inf  
+    if N == 0:
+        print("")
+
+    imax = None 
+    # Set the vmax to the lowest possible value
+    vmax = -np.inf
 
     for i in range(N):
-        #First itteration: value = 2
+        # First itteration: value = 2
         value = values[i]
-        #Check whether this value is larger than than any previous 
+        # Check whether this value is larger than than any previous
         if value > vmax:
-            #update the index and the vmax
+            # update the index and the vmax
             imax = i
-            vmax = value 
-
+            vmax = value
 
     return imax
+
 
 values = [2, 3, -1, 7, 4]
 imax = argmax(values)
 
-print(f"The maximum is located at {imax}")
+print(f'The maximum is located at {imax}')
+
+
+#Compare to numpys argmax 
+j = np.argmax(values)
+print(f'The maximum is located at {imax}')
+
+#if __name__ == '__main__':
+    # Run the main script if this script is executed
+    #main()
+
+
+
+
+

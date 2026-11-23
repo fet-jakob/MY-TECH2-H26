@@ -8,11 +8,11 @@ Claude updates this file at the end of every task. A fresh session starts by rea
 |---|---|---|---|---|---|
 | 0 | Setup: kernel, notebook skeleton, git | – | Mon 23, 10:00–10:45 | done | pandas 3.0.5, no pyarrow; skeleton in `term_paper.ipynb`; code-style skill in `.claude/skills/` |
 | 1a | Task 1: load and filter the three files | 20 | Mon 23, 10:45–13:00 | done (check questions open) | `patents` 2,835,599 rows / 45 MB · `green` 141,882 rows (114,924 patents) / 26 MB · `applicants` 3,059,537 rows / 433 MB · all 3 checkpoints ✓ · fresh-kernel run 18 s, peak 1.2 GB |
-| 1b | Task 1: checkpoints + three overview numbers | (20) | Mon 23, 14:00–15:30 | not started | |
+| 1b | Task 1: checkpoints + three overview numbers | (20) | Mon 23, 14:00–15:30 | done | checkpoints table all ✓ · 1.23 Y02E codes per green patent · 4,359 green patents in >1 main group · 58,955 sample patents with applicants in >1 country |
 | 2 | Task 2: slump? (table + 3-panel figure) | 10 | Mon 23, 15:30–18:00 | not started | |
 | 3 | Task 3: technology mix (shares + stacked bars) | 15 | Tue 24, 09:00–11:00 | not started | |
 | 4 | Task 4: wind vs solar (peak table + line figure) | 20 | Tue 24, 11:00–13:30 | not started | |
-| 5 | Task 5: one top-n function + two 2-panel figures | 25 | Tue 24, 14:00–18:00 | not started | |
+| 5 | Task 5: one top-n function + two 2-panel figures | 25 | Tue 24, 14:00–18:00 | built, answers open | `top_n(category, by, start, end, n)` + `plot_top`; RE shares check 10,676 ✓ / 11,796 vs 11,797 (19 green patents lack applicants, 5 have shares < 1) · RE leaders 2005–09 US > DE > JP, 2015–19 DE > US > DK; CN enters at #6 · Solar: Merck, LG Elec., Samsung Display · Wind: Vestas, GE, Siemens |
 | 6 | Task 6: AI statement (from the AI log below) | 5 | Tue 24, 19:00–19:30 | not started | |
 | 7 | Final review: code-style skill, Restart and Run All, answers | 5 | Tue 24, 19:30–21:30 | not started | |
 | 8 | Submit: final run, candidate numbers, Wiseflow | – | Wed 25, 08:30–10:30 | not started | Hard deadline 12:00 |
@@ -80,7 +80,10 @@ Answer: the leading countries and how that changed, the kinds of organisations i
 | Mon 23 | CPC file read in chunks of 1,000,000 rows, Y02E rows kept per chunk | Measured: same 6.8 s, peak 0.32 GB vs 1.84 GB for a full read |
 | Mon 23 | `green` = one row per (patent, Y02E code) with `code`, `main_group` and `technology` labels (dicts from Tables 1–2); technology set only in group 10 | Labels ready for plots; code rows needed for codes-per-patent in 1b; no duplicate (patent, code) rows |
 | Mon 23 | ruff's F401 auto-fix removed the unused `plt` import | Task 2 adds `import matplotlib.pyplot as plt` back to the imports cell |
-| Mon 23 | Data notes for 1b/T5: 429 sample patents have no applicant row (2,835,170 covered); 12 applicant rows lack `ctry_code`; 8 group-10 codes (10/0…) have no technology | Affects the multi-country count and Task 5 country sums |
+| Mon 23 | Data notes for 1b/T5: 429 sample patents have no applicant row (2,835,170 covered); 12 applicant rows have `ctry_code` 'NA' (Namibia), which pandas reads as missing by default; 8 group-10 codes (10/0…) have no technology | Affects the multi-country count and Task 5 country sums |
+| Mon 23 | `read_applicants` uses `keep_default_na=False, na_values=['']` | 'NA' is Namibia's country code; without it 12 rows got NaN. Checkpoint 3 unchanged |
+| Mon 23 | `categories` (one row per patent × Table 1/2 label, 162,166 rows) built at the end of Task 1 | One lookup for both tables in `top_n`; Tasks 3 and 4 should reuse it (filter on Table 1 / Table 2 labels) instead of deduplicating `green` again |
+| Mon 23 | Task 5: `green_applicants` (126k rows) filtered once; `plot_top` cuts labels at 35 chars, Figure 2 uses separate x-scales | Small merges per call; names up to 149 chars; solar ≈ 2× wind |
 | Mon 23 | No pyarrow in TECH2, so pandas 3 `str` columns are Python objects (~50–60 B per value) | String columns drive memory; keep them few and filter early |
 
 ## AI log (feeds Task 6)
@@ -89,4 +92,5 @@ Answer: the leading countries and how that changed, the kinds of organisations i
 |---|---|---|---|
 | Mon 23 | Claude Code (VS Code) | Setup: checked the TECH2 env, created the notebook skeleton, git repo | We checked versions and `git status` ourselves |
 | Mon 23 | Claude Code (VS Code) | Task 1a: measured full vs chunked CPC read, wrote the three reading functions and the import cell | Checkpoints 1–3 reproduced; extra checks (code layout, labels, duplicates) in a scratch script; fresh-kernel run |
+| Mon 23 | Claude Code (VS Code) | Task 1b checkpoints/overview, Namibia 'NA' fix, `categories` table, Task 5 function + figures | Checkpoints table; share sum vs patent count check; figures inspected; fresh-kernel runs |
 | Mon 23 | Claude (claude.ai) | Read the exam text and course material, checked the data files' structure and the three checkpoints, and wrote this plan and the VS Code setup | Checkpoints reproduced from the raw files |

@@ -3,7 +3,7 @@
 These instructions load at the start of every session. `PLAN.md` holds the task plan, status and logs. Read it at the start of every session before doing anything else.
 
 <context>
-I'm Bjørn Johan, a first-year BEDS student at NHH. This folder is our group's TECH2 home exam (term paper): green energy patents in EPO data. The exam text is `term-paper-h26.pdf`. Read the relevant page of it before working on any task, because the grader marks against its exact wording.
+I'm Jakob, a first-year BEDS student at NHH. This folder is our group's TECH2 home exam (term paper): green energy patents in EPO data. The exam text is `term-paper-h26.pdf`. Read the relevant page of it before working on any task, because the grader marks against its exact wording.
 
 - Deadline: **Wed 25 Nov 2026, 12:00** in Wiseflow. Late submissions are not accepted. Our own target is to submit by 10:30.
 - Deliverable: ONE notebook, `term_paper.ipynb`, in this folder. It holds group candidate numbers only (no names), and it is submitted with all output after Restart and Run All.
